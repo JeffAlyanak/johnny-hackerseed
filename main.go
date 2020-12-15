@@ -12,7 +12,7 @@ import (
 	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 	"fyne.io/fyne/widget"
-	"github.com/jeffalyanak/twin-jhs/icon"
+	"github.com/jeffalyanak/johnny-hackerseed/icon"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -23,7 +23,7 @@ var (
 
 	count   int = 0
 	episode string
-	URL     string
+	url     string
 )
 
 func main() {
@@ -58,9 +58,9 @@ func beginTheMagic() {
 		i := rand.Intn(total)
 
 		episode = feed.Items[i].Title
-		URL = feed.Items[i].Enclosures[0].URL
+		url = feed.Items[i].Enclosures[0].URL
 
-		downloadEpisode(URL)
+		downloadEpisode(url)
 		count++
 	}
 }
@@ -68,11 +68,11 @@ func beginTheMagic() {
 // downloadEpisode takes a URL and downloads whatever it finds there,
 // although it does not write this file to disk and essentially throws
 // it away.
-func downloadEpisode(URL string) {
+func downloadEpisode(u string) {
 	client := http.Client{}
 
 	// Put content on file
-	resp, err := client.Get(URL)
+	resp, err := client.Get(u)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -106,7 +106,7 @@ func (pt *PassThru) Read(p []byte) (int, error) {
 		if percentage-pt.progress > 2 {
 			str := "Episode Downloaded so far:  " + fmt.Sprint(count) + "\n"
 			str += "Episode Downloading now:    " + episode + "\n"
-			str += "Episode Link:               " + URL + "\n"
+			str += "Episode Link:               " + url + "\n"
 			str += "Current Download Progress:  " + fmt.Sprint(percentageRounded) + "%"
 
 			status.SetText(str)
